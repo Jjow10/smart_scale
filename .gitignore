@@ -1,0 +1,12 @@
+# Build output only — exclude nothing else
+build/
+Debug/
+Release/
+*.o
+*.d
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+*.bak
