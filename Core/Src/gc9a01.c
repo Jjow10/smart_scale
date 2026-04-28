@@ -2,6 +2,11 @@
 #include "stm32f4xx_hal_spi.h"
 
 static SPI_HandleTypeDef *_hspi;
+static volatile uint8_t spi_tx_done = 1;
+
+void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi) {
+    if (hspi == _hspi) spi_tx_done = 1;
+}
 
 static inline void CS_LOW(void){
     HAL_GPIO_WritePin(GC9A01_CS_PORT, GC9A01_CS_PIN, GPIO_PIN_RESET);
@@ -381,21 +386,22 @@ void GC9A01_FillRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t co
 
     GC9A01_SetWindow(x, y, x + w - 1, y + h - 1);
 
-    // Pre-fill a row buffer with the colour (big-endian RGB565)
     uint8_t buf[GC9A01_WIDTH * 2];
     for (uint16_t i = 0; i < w; i++) {
         buf[i * 2]     = colour >> 8;
         buf[i * 2 + 1] = colour & 0xFF;
     }
 
-    // Send all rows — CS stays LOW for the entire pixel burst
     DC_HIGH();
     CS_LOW();
     for (uint16_t row = 0; row < h; row++) {
-        HAL_SPI_Transmit(_hspi, buf, w * 2, HAL_MAX_DELAY);
+        spi_tx_done = 0;
+        HAL_SPI_Transmit_DMA(_hspi, buf, w * 2);
+        while (!spi_tx_done);   // wait for DMA to finish this row
     }
     CS_HIGH();
 }
+
  
 /*
  * Draw a single pixel at (x, y).

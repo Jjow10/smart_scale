@@ -96,20 +96,21 @@ int main(void)
   hx711_Init();
   GC9A01_Init(&hspi1);
 
-  GC9A01_FillScreen(COLOR_RED);
-  HAL_Delay(1000);
-
-  GC9A01_FillScreen(COLOR_GREEN);
-  HAL_Delay(1000);
-
-  GC9A01_FillScreen(COLOR_BLUE);
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    GC9A01_FillScreen(COLOR_RED);
+    HAL_Delay(1000);
+
+    GC9A01_FillScreen(COLOR_GREEN);
+    HAL_Delay(1000);
+
+    GC9A01_FillScreen(COLOR_BLUE);
+    HAL_Delay(1000);
+
     float weight = hx711_GetWeight();
     printf("Weight: %.1f g\r\n", weight);
     HAL_Delay(500);

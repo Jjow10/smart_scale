@@ -35,8 +35,7 @@ project(${CMAKE_PROJECT_NAME})
 message("Build type: " ${CMAKE_BUILD_TYPE})
 
 # Create an executable object type
-add_executable(${CMAKE_PROJECT_NAME}
-    Core/Inc/GC9A01.h)
+add_executable(${CMAKE_PROJECT_NAME})
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
@@ -56,11 +55,18 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
+    Core/Inc
 )
 
 # Add project symbols (macros)
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined symbols
+)
+
+# Add compile options
+target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
+    $<$<CONFIG:Debug>:-Og -g3>
+    $<$<CONFIG:Release>:-O3>
 )
 
 # Add linked libraries
