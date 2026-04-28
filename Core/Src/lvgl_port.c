@@ -3,8 +3,10 @@
 
 // Draw buffer — LVGL renders into this, then we flush it to the display
 // Size: 1/10 of screen is a good balance between RAM and performance
-#define BUF_SIZE (GC9A01_WIDTH * GC9A01_HEIGHT / 10)
-static lv_color_t lvgl_buf1[BUF_SIZE];
+#define BUF_SIZE (GC9A01_WIDTH * GC9A01_HEIGHT / 4)   
+static lv_color_t lvgl_buf1[BUF_SIZE]; 
+
+static volatile uint8_t flush_done = 1;
 
 // ─── Flush callback ──────────────────────────────────────────────────────────
 // LVGL calls this when it has rendered a region and wants it sent to the display
@@ -35,6 +37,7 @@ void LVGL_Port_Init(void)
     disp_drv.ver_res  = GC9A01_HEIGHT;
     disp_drv.flush_cb = lvgl_flush_cb;
     disp_drv.draw_buf = &draw_buf;
+    disp_drv.full_refresh = 1;
     lv_disp_drv_register(&disp_drv);
 }
 
