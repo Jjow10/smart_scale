@@ -45,17 +45,25 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined library search paths
 )
 
+file(GLOB_RECURSE LVGL_SOURCES    
+    Middlewares/lvgl/src/*.c
+)
+
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     Core/Src/hx711.c
     Core/Src/gc9a01.c
+    Core/Src/lvgl_port.c
+    ${LVGL_SOURCES}
 )
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
     Core/Inc
+    Middlewares/lvgl
+    Middlewares 
 )
 
 # Add project symbols (macros)

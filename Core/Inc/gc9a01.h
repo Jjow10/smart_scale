@@ -66,4 +66,7 @@ void GC9A01_FillScreen(uint16_t colour);
 void GC9A01_FillRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t colour);
 void GC9A01_DrawPixel(uint16_t x, uint16_t y, uint16_t colour);
 
+SPI_HandleTypeDef* GC9A01_GetSPI(void);
+void GC9A01_Flush(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t *data, uint32_t len);
+
 #endif
