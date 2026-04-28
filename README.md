@@ -40,7 +40,7 @@ If load cell is replaced recalibrate.
 LVGL v8.3 is used for this project and included as a submodule
 Clone this Repo with 
 ```bash
-git clone --recurse-submodules <your-repo-url>
+git clone --recurse-submodules <repo-url>
 ```
 
 If already cloned without submodules:
