@@ -4,6 +4,10 @@
 static SPI_HandleTypeDef *_hspi;
 static volatile uint8_t spi_tx_done = 1;
 
+SPI_HandleTypeDef* GC9A01_GetSPI(void) { 
+    return _hspi;
+}   
+
 void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi) {
     if (hspi == _hspi) spi_tx_done = 1;
 }
@@ -40,6 +44,15 @@ static void GC9A01_SendCmd(uint8_t cmd)
     CS_HIGH();
 }
  
+void GC9A01_Flush(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t *data, uint32_t len)
+{
+    GC9A01_SetWindow(x0, y0, x1, y1);
+    DC_HIGH();
+    CS_LOW();
+    HAL_SPI_Transmit(_hspi, data, len, HAL_MAX_DELAY);
+    CS_HIGH();
+}
+
 /*
  * Send a single data byte.
  * DC must be HIGH for data bytes.
@@ -330,7 +343,7 @@ void GC9A01_Init(SPI_HandleTypeDef *hspi)
      *    Change MADCTL_BGR to MADCTL_BGR if colours appear inverted
      */
     GC9A01_SendCmd(GC9A01_CMD_MADCTL);
-    GC9A01_SendData8(0x00);             // 0x00 = 0° rotation, RGB
+    GC9A01_SendData8(0x40);           
  
     /* 6. Sleep Out — must wait 120ms after this */
     GC9A01_SendCmd(GC9A01_CMD_SLPOUT);
