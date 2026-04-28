@@ -59,22 +59,18 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC
+#define LOADC_DOUT_Pin GPIO_PIN_0
+#define LOADC_DOUT_GPIO_Port GPIOA
+#define LOADC_SCK_Pin GPIO_PIN_1
+#define LOADC_SCK_GPIO_Port GPIOA
 #define USART_TX_Pin GPIO_PIN_2
 #define USART_TX_GPIO_Port GPIOA
 #define USART_RX_Pin GPIO_PIN_3
 #define USART_RX_GPIO_Port GPIOA
-#define LD2_Pin GPIO_PIN_5
-#define LD2_GPIO_Port GPIOA
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
-#define SWO_Pin GPIO_PIN_3
-#define SWO_GPIO_Port GPIOB
-#define LOAD_DOUT_Pin GPIO_PIN_4
-#define LOAD_DOUT_GPIO_Port GPIOB
-#define LOAD_SCK_Pin GPIO_PIN_5
-#define LOAD_SCK_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
