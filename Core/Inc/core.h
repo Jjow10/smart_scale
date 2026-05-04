@@ -6,6 +6,6 @@
 extern float scaleWeight;
 
 void stateSetWeight(float weight);
-float stateGetWeight();
+float stateGetWeight(void);
 
 #endif /* INC_CORE_H_ */

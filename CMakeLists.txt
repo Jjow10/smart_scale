@@ -57,6 +57,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/lvgl_port.c
     Core/Src/core.c
     Core/Src/scale.c
+    Core/Src/ui.c
     ${LVGL_SOURCES}
 )
 

@@ -45,7 +45,9 @@ int32_t hx711_Read(void){
 }
 
 void hx711_Init(void){
-    hx711_Read();
-    // hx711_Tare();
+    for(int i = 0; i < 10; i++){
+        hx711_Read();
+        HAL_Delay(10); // HX711 outputs ~10 SPS at default rate
+    }
 }
 

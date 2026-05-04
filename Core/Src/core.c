@@ -6,6 +6,6 @@ void stateSetWeight(float weight){
     scaleWeight = weight;
 }
 
-float stateGetWeight(){
+float stateGetWeight(void){
     return scaleWeight;
 }
