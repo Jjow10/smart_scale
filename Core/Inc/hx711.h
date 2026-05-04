@@ -26,12 +26,6 @@
 
 int32_t hx711_Read(void);
 
-void hx711_Tare(void);
-
 void hx711_Init(void);
-
-float hx711_GetWeight(void);
-
-int32_t hx711_GetTareOffset(void);
 
 #endif /* INC_HX711_H_ */

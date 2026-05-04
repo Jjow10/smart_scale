@@ -20,13 +20,16 @@
 #include "main.h"
 #include "dma.h"
 #include "spi.h"
+#include "src/widgets/lv_label.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "core.h"
 #include "hx711.h"
 #include "gc9a01.h"
+#include "scale.h"
 #include "lvgl_port.h"
 /* USER CODE END Includes */
 
@@ -93,8 +96,9 @@ static void SmartScale_BootAnim(void)
     lv_obj_align(main_label, LV_ALIGN_CENTER, 0, -10);
 
     sub_label = lv_label_create(scr);
-    lv_label_set_text(sub_label, "loading...");
-    lv_obj_set_style_text_color(sub_label, lv_color_hex(0x555555), 0);
+    float weight = stateGetWeight();
+    lv_label_set_text_fmt(sub_label, "%.1f g", weight);
+    lv_obj_set_style_text_color(sub_label, lv_color_white(), 0);
     lv_obj_align(sub_label, LV_ALIGN_CENTER, 0, 15);
 
     /* Spin the arc */
@@ -144,6 +148,7 @@ int main(void)
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
   hx711_Init();
+  scale_Tare();
   GC9A01_Init(&hspi1);
   LVGL_Port_Init();
 
@@ -162,7 +167,7 @@ int main(void)
     lv_timer_handler();
     // HAL_Delay(5);
 
-    // float weight = hx711_GetWeight();
+    // float weight = stateGetWeight();
     // printf("Weight: %.1f g\r\n", weight);
     // HAL_Delay(500);
     /* USER CODE END WHILE */
