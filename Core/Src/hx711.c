@@ -4,9 +4,6 @@
 
 #include "hx711.h"
 
-static int32_t tare_offset = 0;
-static float scale_factor = 393.9f; //Hard coded
-
 static inline void SCK_HIGH(void){
     HAL_GPIO_WritePin(HX711_SCK_PORT, HX711_SCK_PIN, GPIO_PIN_SET);
 }
@@ -48,25 +45,9 @@ int32_t hx711_Read(void){
 }
 
 void hx711_Init(void){
-    hx711_Read();
-    hx711_Tare();
+    for(int i = 0; i < 10; i++){
+        hx711_Read();
+        HAL_Delay(10); // HX711 outputs ~10 SPS at default rate
+    }
 }
 
-void hx711_Tare(void){
-    int64_t sum = 0;
-    for(int i = 0; i < 8; i++)
-        sum += hx711_Read();
-    tare_offset = (int32_t)(sum / 8);
-}
-
-float hx711_GetWeight(void){
-    int64_t sum = 0;
-    for(int i = 0; i < 3; i++)
-        sum += hx711_Read();
-    // Cast to float before dividing to avoid integer truncation
-    return ((float)sum / 3.0f - (float)tare_offset) / scale_factor;
-}
-
-int32_t hx711_GetTareOffset(void){
-    return tare_offset;
-}

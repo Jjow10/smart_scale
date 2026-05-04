@@ -20,13 +20,17 @@
 #include "main.h"
 #include "dma.h"
 #include "spi.h"
+#include "src/widgets/lv_label.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "core.h"
 #include "hx711.h"
 #include "gc9a01.h"
+#include "scale.h"
+#include "ui.h"
 #include "lvgl_port.h"
 /* USER CODE END Includes */
 
@@ -95,12 +99,11 @@ int main(void)
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
   hx711_Init();
+  scale_Tare();
   GC9A01_Init(&hspi1);
   LVGL_Port_Init();
 
-  lv_obj_t *label = lv_label_create(lv_scr_act());
-  lv_label_set_text(label, "Smart Scale");
-  lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+  SmartScale_BootAnim();
 
   /* USER CODE END 2 */
 
@@ -108,23 +111,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    scale_UpdateWeight();
     lv_timer_handler();
-    HAL_Delay(5);
-
-    // GC9A01_FillScreen(COLOR_RED);
-    // HAL_Delay(1000);
-
-    // GC9A01_FillScreen(COLOR_GREEN);
-    // HAL_Delay(1000);
-
-    // GC9A01_FillScreen(COLOR_BLUE);
-    // HAL_Delay(1000);
-
-    
-
-    float weight = hx711_GetWeight();
-    printf("Weight: %.1f g\r\n", weight);
-    HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

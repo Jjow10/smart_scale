@@ -8,10 +8,6 @@ SPI_HandleTypeDef* GC9A01_GetSPI(void) {
     return _hspi;
 }   
 
-void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi) {
-    if (hspi == _hspi) spi_tx_done = 1;
-}
-
 static inline void CS_LOW(void){
     HAL_GPIO_WritePin(GC9A01_CS_PORT, GC9A01_CS_PIN, GPIO_PIN_RESET);
 }
@@ -44,13 +40,24 @@ static void GC9A01_SendCmd(uint8_t cmd)
     CS_HIGH();
 }
  
-void GC9A01_Flush(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t *data, uint32_t len)
+void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
 {
+    if (hspi == _hspi) {
+        spi_tx_done = 1;
+        CS_HIGH();
+    }
+}
+
+void GC9A01_Flush(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1,
+                  uint8_t *data, uint32_t len)
+{
+    while (!spi_tx_done);   // wait for any previous transfer to finish
     GC9A01_SetWindow(x0, y0, x1, y1);
     DC_HIGH();
     CS_LOW();
-    HAL_SPI_Transmit(_hspi, data, len, HAL_MAX_DELAY);
-    CS_HIGH();
+    spi_tx_done = 0;
+    HAL_SPI_Transmit_DMA(_hspi, data, len);
+    while (!spi_tx_done);   // wait for this transfer
 }
 
 /*
@@ -343,7 +350,7 @@ void GC9A01_Init(SPI_HandleTypeDef *hspi)
      *    Change MADCTL_BGR to MADCTL_BGR if colours appear inverted
      */
     GC9A01_SendCmd(GC9A01_CMD_MADCTL);
-    GC9A01_SendData8(0x40);           
+    GC9A01_SendData8(0x80);     
  
     /* 6. Sleep Out — must wait 120ms after this */
     GC9A01_SendCmd(GC9A01_CMD_SLPOUT);
