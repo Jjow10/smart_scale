@@ -66,6 +66,11 @@ const osThreadAttr_t lvglTask_attributes = {
   .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityHigh,
 };
+/* Definitions for lvgl_mutex */
+osMutexId_t lvgl_mutexHandle;
+const osMutexAttr_t lvgl_mutex_attributes = {
+  .name = "lvgl_mutex"
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -86,6 +91,9 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
+  /* Create the mutex(es) */
+  /* creation of lvgl_mutex */
+  lvgl_mutexHandle = osMutexNew(&lvgl_mutex_attributes);
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
